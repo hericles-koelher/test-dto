@@ -1,40 +1,15 @@
+import { IUser } from './users.interface';
+
 /**
  * Classe de usuário.
  */
-export class User {
-  /**
-   * Identificador do usuário.
-   */
+export class User implements IUser {
   id: string;
-
-  /**
-   * Nome do usuário.
-   */
   name: string;
-
-  /**
-   * E-mail do usuário.
-   */
   email: string;
-
-  /**
-   * Senha do usuário.
-   */
   password: string;
-
-  /**
-   * Papel do usuário.
-   */
   role: string;
-
-  /**
-   * Data de criação do usuário.
-   */
   createdAt: Date;
-
-  /**
-   * Data de atualização do usuário.
-   */
   updatedAt: Date;
 
   /**

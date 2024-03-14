@@ -1,31 +1,26 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Expose } from 'class-transformer';
+import { Exclude, plainToClass } from 'class-transformer';
+import { IUser } from 'src/users/users.interface';
 import { User } from 'src/users/users.schema';
 
 /**
  * DTO de usuário público.
  */
-export class PublicUserDto {
-  /**
-   * O identificador do usuário.
-   */
+export class PublicUserDto implements IUser {
+  @Expose()
   @ApiProperty({ name: 'id', description: 'Identificador do usuário' })
   id: string;
 
-  /**
-   * O nome do usuário.
-   */
+  @Expose()
   @ApiProperty({ name: 'name', description: 'Nome do usuário' })
   name: string;
 
-  /**
-   * O email do usuário.
-   */
+  @Expose()
   @ApiProperty({ name: 'email', description: 'Email do usuário' })
   email: string;
 
-  /**
-   * O papel do usuário.
-   */
+  @Expose()
   @ApiProperty({
     name: 'role',
     description: 'Papel do usuário',
@@ -33,48 +28,35 @@ export class PublicUserDto {
   })
   role: string;
 
-  /**
-   * A data de criação do usuário.
-   */
+  @Expose()
   @ApiProperty({
     name: 'createdAt',
     description: 'Data de criação do usuário',
   })
   createdAt: Date;
 
-  /**
-   * A data de atualização do usuário.
-   */
+  @Expose()
   @ApiProperty({
     name: 'updatedAt',
     description: 'Data de atualização do usuário',
   })
   updatedAt: Date;
 
+  @Exclude()
+  password: string;
+
   /**
    * Constrói uma nova instância de DTO de usuário público.
    *
-   * @param id Identificador do usuário.
-   * @param name Nome do usuário.
-   * @param email Email do usuário.
-   * @param role Papel do usuário.
-   * @param createdAt Data de criação do usuário.
-   * @param updatedAt Data de atualização do usuário.
+   * @param user Entidade de usuário.
    */
-  constructor(
-    id: string,
-    name: string,
-    email: string,
-    role: string,
-    createdAt: Date,
-    updatedAt: Date,
-  ) {
-    this.id = id;
-    this.name = name;
-    this.email = email;
-    this.role = role;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
+  constructor(user: IUser) {
+    Object.assign(
+      this,
+      plainToClass(PublicUserDto, user, {
+        excludeExtraneousValues: true,
+      }),
+    );
   }
 
   /**
@@ -84,13 +66,6 @@ export class PublicUserDto {
    * @returns Um novo DTO de usuário público.
    */
   static fromEntity(user: User): PublicUserDto {
-    return new PublicUserDto(
-      user.id,
-      user.name,
-      user.email,
-      user.role,
-      user.createdAt,
-      user.updatedAt,
-    );
+    return new PublicUserDto(user);
   }
 }
